@@ -21,40 +21,40 @@ if(valid_user()){
                 if($result->num_rows >0){
                     if($row=$result->fetch_array()){
     if(emp_check()){ account_emp(); }else{ ?>
-    <table class='table table-striped'>
-        <thead>
-            <tr>
-                <th colspan='2' class='table-inverse'>
-                    <center>Account Details</center>
-                </th>
-            </tr>
-        </thead>
-        <tr>
-            <td>Username: </td>
-            <td>
-                <?php echo $_SESSION['valid_user']; ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Account Number: </td>
-            <td>
-                <?php echo $row[0]; ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Customer Id: </td>
-            <td>
-                <?php echo $row[1]; ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Balance: </td>
-            <td>
-                <?php echo $row[2]; ?>
-            </td>
-        </tr>
-    </table>
-    <?php
+  <table class='table table-striped'>
+    <thead>
+      <tr>
+        <th colspan='2' class='table-inverse'>
+          <center>Account Details</center>
+        </th>
+      </tr>
+    </thead>
+    <tr>
+      <td>Username: </td>
+      <td>
+        <?php echo $_SESSION['valid_user']; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Account Number: </td>
+      <td>
+        <?php echo $row[0]; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Customer Id: </td>
+      <td>
+        <?php echo $row[1]; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Balance: </td>
+      <td>
+        <?php echo $row[2]; ?>
+      </td>
+    </tr>
+  </table>
+  <?php
                     }
                     }else{
                         throw new Exception("Something Went Wrong. Can't fetch_array()");

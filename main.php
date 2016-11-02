@@ -28,12 +28,12 @@ do_menu($_SESSION['valid_user']);
 }else{
     do_header("PIGGY BANK");
 ?>
-        <?php
+                <?php
         if(isset($_SESSION['logged_in'])){
             if($_SESSION['logged_in']==1){
                 ?>
-            <h1>Welcome to the Bank Page</h1>
-            <?php
+                    <h1>Welcome to the Bank Page</h1>
+                    <?php
                 unset($_SESSION['logged_in']);
             }else{
                 unset($_SESSION['logged_in']);

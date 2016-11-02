@@ -64,7 +64,7 @@ do_index_menu();
                                 throw new Exception("Sorry, User not found");
                             }
                         }else{
-                            throw new Exception("Can't Execute Query");
+                            throw new Exception(" User Not Found.");
                         }
                     } catch (Exception $ex) {
                         do_exp_content($ex->getMessage());
