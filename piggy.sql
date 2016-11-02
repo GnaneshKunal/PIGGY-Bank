@@ -37,7 +37,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (123456789,123,50000,'customer');
+INSERT INTO `account` VALUES (123456789,123,52000,'customer');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,6 +90,33 @@ LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
 INSERT INTO `customer` VALUES (123,'gnanesh','28 - 1382/1, New Balaji Colony,chittoor','customer');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `deposit`
+--
+
+DROP TABLE IF EXISTS `deposit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `deposit` (
+  `deposit_number` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `account_number` int(11) DEFAULT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`deposit_number`)
+) ENGINE=MyISAM AUTO_INCREMENT=12347 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `deposit`
+--
+
+LOCK TABLES `deposit` WRITE;
+/*!40000 ALTER TABLE `deposit` DISABLE KEYS */;
+INSERT INTO `deposit` VALUES (12345,123,50000,123456789,'2016-11-02'),(12346,123,2000,123456789,'2016-11-02');
+/*!40000 ALTER TABLE `deposit` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -153,12 +180,13 @@ DROP TABLE IF EXISTS `loan`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `loan` (
-  `loan_number` int(11) NOT NULL,
+  `loan_number` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) DEFAULT NULL,
   `amount` int(11) NOT NULL,
   `account_number` int(11) DEFAULT NULL,
+  `loan_active` int(1) DEFAULT '0',
   PRIMARY KEY (`loan_number`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=123458 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +195,7 @@ CREATE TABLE `loan` (
 
 LOCK TABLES `loan` WRITE;
 /*!40000 ALTER TABLE `loan` DISABLE KEYS */;
-INSERT INTO `loan` VALUES (123456,123,3000,123456789);
+INSERT INTO `loan` VALUES (12345,123,4000,123456789,0),(123456,123,3000,123456789,0),(123457,123,70000,123456789,1);
 /*!40000 ALTER TABLE `loan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-26 22:26:43
+-- Dump completed on 2016-11-02 16:37:01
