@@ -97,29 +97,27 @@ function do_index_menu(){
 }
 function do_menu($user){
     ?>
-      <center>
-        <nav class="navbar navbar-light bg-faded">
-          <div class="navbar-header"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-            <a class="navbar-brand" href="main.php">
-              <h2>PIGGY BANK</h2> </a>
-          </div>
+      <nav class="navbar navbar-light bg-faded">
+        <div class="navbar-header"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+          <a class="navbar-brand" href="main.php">
+            <h2>PIGGY BANK</h2> </a>
+        </div>
+        <div style="float:right;padding-right:80px;">
           <div class="nav navbar-nav"> <span class="nav-item nav-link active">
                             <?php echo ucfirst($user); ?>
-                        </span> <a class="nav-item nav-link active" href="account.php">Account</a>
-            <a class='nav-item nav-link active' href='deposit.php'>Deposit</a>  
-            <a class="nav-item nav-link active" href="employee.php">Employee</a>
+                        </span> <a class="nav-item nav-link active" href="account.php">Account</a> <a class='nav-item nav-link active' href='deposit.php'>Deposit</a> <a class="nav-item nav-link active" href="employee.php">Employee</a>
             <?php
                         if($_SESSION['user_type']=='employee'){
                             ?> <a class="nav-item nav-link active" href="customer.php">customer</a> <a class='nav-item nav-link active' href='dependent.php'>My Dependent</a>
               <?php
                         }
                         if($_SESSION['user_type']!='employee'){
-                            ?><a class="nav-item nav-link active" href="loan.php">Loan</a>
+                            ?><a class="nav-item nav-link active" href="transfer.php">Transfer</a><a class="nav-item nav-link active" href="loan.php">Loan</a>
                 <?php
                         }
-                            ?> <a class="nav-item nav-link active" href="logout.php">Logout</a> </div>
-        </nav>
-      </center>
+            ?> <a class="nav-item nav-link active" href="logout.php">Logout</a> </div>
+        </div>
+      </nav>
       <?php
 }
 function register_form(){
@@ -393,7 +391,7 @@ function loan_active_check(){
                     throw new Exception("Can't Fetch Array");
                 } */
             }else{
-                throw new Exception("Something Went Worng");
+                throw new Exception(" ");
             }
         }else{
             throw new Exception("Something Went Wrong. Can't Execute Query");
@@ -458,7 +456,7 @@ function check_loan(){
                       throw new Exception("Can't Fetch Array");
                     }
                 }else{
-                  throw new Exception("Something Went Wrong");
+                  throw new Exception("No Loans Yet");
                 }
             }else{
               throw new Exception("Can't Execute Query");
@@ -500,8 +498,7 @@ function loan_prev(){
                         <tr>
                           <td>LOAN ACTIVE: </td>
                           <td>
-                            <?php if($row[4]==0){echo "PAID";}else{echo "<span style='color:red;'>DUE</span>";}?>
-                          </td>
+                            <?php if($row[4]==0){echo "PAID";}else{echo "<span style='color:red;'>DUE</span>";}?> </td>
                         </tr>
                         <tr>
                           <td colspan='2'></td>
@@ -509,7 +506,7 @@ function loan_prev(){
                         <?php
                 }
       }else{
-        throw new Exception("Something Went Wrong");
+        throw new Exception("No Loans Yet");
       }
     }else{
       throw new Exception ("Can't Execute Query");
@@ -538,18 +535,18 @@ function loan_details($ac_no){
 
 function do_deposit_menu(){
     ?>
-              <div class='container'>
-                <nav class="navbar navbar-light bg-faded">
-                  <ul class="nav navbar-nav">
-                    <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <div class='container'>
+                            <nav class="navbar navbar-light bg-faded">
+                              <ul class="nav navbar-nav">
+                                <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Deposit
       </a>
-                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"> <a class="dropdown-item" href="deposit.php?deposit_task=deposit">DEPOSIT</a> <a class="dropdown-item" href="deposit.php?deposit_task=view_balance">VIEW BALANCE</a><a class="dropdown-item" href="deposit.php?deposit_task=prev_deposit">PREVIOUS DEPOSITS</a> </div>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
-              <?php
+                                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink"> <a class="dropdown-item" href="deposit.php?deposit_task=deposit">DEPOSIT</a> <a class="dropdown-item" href="deposit.php?deposit_task=view_balance">VIEW BALANCE</a><a class="dropdown-item" href="deposit.php?deposit_task=prev_deposit">PREVIOUS DEPOSITS</a> </div>
+                                </li>
+                              </ul>
+                            </nav>
+                          </div>
+                          <?php
 }
 
 function deposit_details($acc){
@@ -569,20 +566,93 @@ function deposit_details($acc){
 
 function do_depo_content($msg,$add_msg){
     ?>
-                <section id="about" class="about temp1">
-                  <div class="container">
-                    <div class="row">
-                      <div class="col-lg-12 text-center">
-                        <h2><?php echo $msg; ?></h2>
-                        <p class="lead">
-                          <?php echo $add_msg; ?> <a style='text-decoration:none;' href="#">PIGGY BANK</a>.</p>
-                      </div>
-                    </div>
-                    <!-- /.row -->
-                  </div>
-                  <!-- /.container -->
-                </section>
-                <?php
+                            <section id="about" class="about temp1">
+                              <div class="container">
+                                <div class="row">
+                                  <div class="col-lg-12 text-center">
+                                    <h2><?php echo $msg; ?></h2>
+                                    <p class="lead">
+                                      <?php echo $add_msg; ?> <a style='text-decoration:none;' href="#">PIGGY BANK</a>.</p>
+                                  </div>
+                                </div>
+                                <!-- /.row -->
+                              </div>
+                              <!-- /.container -->
+                            </section>
+                            <?php
 }
 
+
+
+
+
+//-----------------------TRANSFER------------------------
+function tranfer_get_balance($acc){
+  global $mysqli;
+  $output="";
+  $sql="select balance from account where account_number=$acc";
+  if($result=$mysqli->query($sql)){
+    if($result->num_rows>0){
+      if($row=$result->fetch_array()){
+        $output=$row[0];
+        return $output;
+      }
+    }
+  }
+}
+
+function transfer_details($acc){
+  global $mysqli;
+  $details=0;
+  $sql="select balance from account where account_number=$acc";
+  if($result=$mysqli->query($sql)){
+    if($result->num_rows>0){
+      if($row=$result->fetch_array()){
+        $details=$row[0];
+        return $details;
+      }
+    }
+  }
+}
+
+
+function transfer_account_number_check($acc){
+  global $mysqli;
+  $sql="select account_number from account where account_number=$acc";
+  if($result=$mysqli->query($sql)){
+    if($result->num_rows>0){
+      return true;
+    }else{
+      return false;
+    }
+  }else{
+    return false;
+  }
+}
+function do_transfer($amount1,$acc1){
+  global $mysqli;
+  $sql="update account set balance=$amount1 where account_number=$acc1;";
+  if($mysqli->query($sql)){
+    return true;
+  }else{
+    return false;
+  }
+}
+function do_transfer_content($msg,$add_msg){
+    ?>
+                            <section id="about" class="about temp1">
+                              <div class="container">
+                                <div class="row">
+                                  <div class="col-lg-12 text-center">
+                                    <h2><?php echo $msg; ?></h2>
+                                    <p class="lead">
+                                      <?php echo $add_msg; ?> <a style='text-decoration:none;' href="#">PIGGY BANK</a>.</p>
+                                  </div>
+                                </div>
+                                <!-- /.row -->
+                              </div>
+                              <!-- /.container -->
+                            </section>
+                            <?php
+}
 ?>

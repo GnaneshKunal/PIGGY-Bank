@@ -37,7 +37,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (123456789,123,52000,'customer');
+INSERT INTO `account` VALUES (1234567,12345,60000,'customer'),(123456789,123,53000,'customer');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,7 +88,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (123,'gnanesh','28 - 1382/1, New Balaji Colony,chittoor','customer');
+INSERT INTO `customer` VALUES (123,'gnanesh','28 - 1382/1, New Balaji Colony,chittoor','customer'),(12345,'Santhosh','Vellore','customer');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,7 +245,7 @@ CREATE TABLE `user_accounts` (
 
 LOCK TABLES `user_accounts` WRITE;
 /*!40000 ALTER TABLE `user_accounts` DISABLE KEYS */;
-INSERT INTO `user_accounts` VALUES ('gnanesh','0e818bfa0679df304036382aaa7667df92cbe30e',123456789);
+INSERT INTO `user_accounts` VALUES ('Santhosh','f66039a193750976c1d8c128493b2f724058b223',1234567),('gnanesh','0e818bfa0679df304036382aaa7667df92cbe30e',123456789);
 /*!40000 ALTER TABLE `user_accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -258,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-02 16:37:01
+-- Dump completed on 2016-11-03 15:33:47
