@@ -1,0 +1,3 @@
+customer:- username:name, password:customer_id
+
+Bank:- username:name,password:telephone_no
