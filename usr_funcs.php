@@ -102,7 +102,7 @@ function do_menu($user){
           <a class="navbar-brand" href="main.php">
             <h2>PIGGY BANK</h2> </a>
         </div>
-        <div style="float:right;padding-right:80px;">
+        <div style="float:right;padding-right:1px;">
           <div class="nav navbar-nav"> <span class="nav-item nav-link active">
                             <?php echo ucfirst($user); ?>
                         </span> <a class="nav-item nav-link active" href="account.php">Account</a> <a class="nav-item nav-link active" href="employee.php">Employee</a>
