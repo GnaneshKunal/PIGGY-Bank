@@ -105,14 +105,14 @@ function do_menu($user){
         <div style="float:right;padding-right:80px;">
           <div class="nav navbar-nav"> <span class="nav-item nav-link active">
                             <?php echo ucfirst($user); ?>
-                        </span> <a class="nav-item nav-link active" href="account.php">Account</a> <a class='nav-item nav-link active' href='deposit.php'>Deposit</a> <a class="nav-item nav-link active" href="employee.php">Employee</a>
+                        </span> <a class="nav-item nav-link active" href="account.php">Account</a> <a class="nav-item nav-link active" href="employee.php">Employee</a>
             <?php
                         if($_SESSION['user_type']=='employee'){
                             ?> <a class="nav-item nav-link active" href="customer.php">customer</a> <a class='nav-item nav-link active' href='dependent.php'>My Dependent</a>
               <?php
                         }
                         if($_SESSION['user_type']!='employee'){
-                            ?><a class="nav-item nav-link active" href="transfer.php">Transfer</a><a class="nav-item nav-link active" href="loan.php">Loan</a>
+                            ?> <a class='nav-item nav-link active' href='deposit.php'>Deposit</a><a class="nav-item nav-link active" href="transfer.php">Transfer</a><a class="nav-item nav-link active" href="loan.php">Loan</a>
                 <?php
                         }
             ?> <a class="nav-item nav-link active" href="logout.php">Logout</a> </div>
@@ -157,7 +157,7 @@ function username_check($user){
 function generate_name(){
     global $mysqli;
     if($_SESSION['user_type']='employee'){
-        $sql="select employee_name from employee where employee_id=".$_SESSION['valid_user'];
+        $sql="select employee_name from employee where employee_id=".$_SESSION['valid_user_id'];
         if($result=$mysqli->query($sql)){
             if($row=$result->fetch_array()){
                 return $row[0];
@@ -177,8 +177,8 @@ function valid_user(){
     }
 }
 function valid_user_account_number(){
-    if(isset($_SESSION['valid_user_account_number'])){
-        if(trim($_SESSION['valid_user_account_number'])!=''){
+    if(isset($_SESSION['valid_user_id'])){
+        if(trim($_SESSION['valid_user_id'])!=''){
             return true;
         }else{
             return false;
@@ -242,8 +242,8 @@ function view_account($user,$account_number){
     }
 }
 function valid_user_check(){
-    if(isset($_SESSION['valid_user']) && isset($_SESSION['valid_user_account_number'])){
-        if($_SESSION['valid_user']!='' && $_SESSION['valid_user_account_number']!=''){
+    if(isset($_SESSION['valid_user']) && isset($_SESSION['valid_user_id'])){
+        if($_SESSION['valid_user']!='' && $_SESSION['valid_user_id']!=''){
             return true;
         }else{
             return false;
@@ -285,7 +285,7 @@ function account_emp(){
                   <?php echo $detail[0]?>
                 </td>
                 <td>
-                  <?php echo $_SESSION['valid_user']; ?>
+                  <?php echo $_SESSION['valid_user_id']; ?>
                 </td>
               </tr>
               <tr>
@@ -366,10 +366,11 @@ function do_loan_content($msg,$add_msg){
 function loan_active_check(){
     global $mysqli;
     try{
-        $sql="SELECT loan_active from loan where account_number=".$_SESSION['valid_user_account_number'];
+        $sql="SELECT loan_active from loan where account_number=".$_SESSION['valid_user_id']." and loan_active=1";
         if($result=$mysqli->query($sql)){
             if($result->num_rows>0){
-              $loan_active=false;
+             return true;
+              /* $loan_active=false;
               while($row=$result->fetch_array()){
                 if($row[0]==1){
                   $loan_active=true;
@@ -391,7 +392,7 @@ function loan_active_check(){
                     throw new Exception("Can't Fetch Array");
                 } */
             }else{
-                throw new Exception(" ");
+                return false;
             }
         }else{
             throw new Exception("Something Went Wrong. Can't Execute Query");
@@ -400,6 +401,27 @@ function loan_active_check(){
         do_exp_content($e->getMessage());
     }
 }
+function dep_loan($id){
+  global $mysqli;
+  $sql="SELECT amount,loan_date from loan where account_number=$id and loan_active=1";
+  if($result=$mysqli->query($sql)){
+    if($row=$result->fetch_array()){
+      return $row;
+    }
+  }
+}
+
+function active_loan_amount($id){
+  $balance=dep_balance($id);
+  $loan=dep_loan($id);
+  $k=time();
+  $date=date('d-M-y',strtotime($loan[1]));
+  $m=strtotime($date);
+  $datediff=$k-$m;
+  $days=floor($datediff / (60 * 60 * 24));
+  $final_amount=$loan[0]+$days*$loan[0]*0.0005;
+  return $final_amount;
+}
 
 function check_loan(){
   global $mysqli;
@@ -407,7 +429,7 @@ function check_loan(){
         if(!loan_active_check()){
             do_loan_content('NO ACTIVE LOAN',"YOU CAN REQUEST LOAN NOW");
         }else{
-            $sql="SELECT * FROM loan WHERE account_number=".$_SESSION['valid_user_account_number']." and loan_active=1";
+            $sql="SELECT * FROM loan WHERE account_number=".$_SESSION['valid_user_id']." and loan_active=1";
             if($result=$mysqli->query($sql)){
                 if($result->num_rows>0){
                     if($row=$result->fetch_array()){
@@ -435,7 +457,7 @@ function check_loan(){
                     <tr>
                       <td>Customer Id: </td>
                       <td>
-                        <?php echo $row[1]; ?>
+                        <?php echo $row[3]; ?>
                       </td>
                     </tr>
                     <tr>
@@ -447,7 +469,7 @@ function check_loan(){
                     <tr>
                       <td>Account Number: </td>
                       <td>
-                        <?php echo $row[3]; ?>
+                        <?php echo $row[1]; ?>
                       </td>
                     </tr>
                   </table>
@@ -478,7 +500,7 @@ function loan_prev(){
                       </tr>
                       <?php
   try{
-    $sql="SELECT * FROM loan where account_number=".$_SESSION['valid_user_account_number'];
+    $sql="SELECT * FROM loan where account_number=".$_SESSION['valid_user_id'];
     if($result=$mysqli->query($sql)){
       if($result->num_rows>0){
         while($row=$result->fetch_array()){
@@ -519,7 +541,7 @@ function loan_prev(){
 function loan_details($ac_no){
   global $mysqli;
   $details=array();
-    $sql="SELECT customer_id,account_number FROM account where account_number=".$_SESSION['valid_user_account_number'];
+    $sql="SELECT customer_id,account_number FROM account where account_number=".$_SESSION['valid_user_id'];
   if($result=$mysqli->query($sql)){
     if($result->num_rows>0){
       if($row=$result->fetch_array()){
@@ -587,7 +609,7 @@ function do_depo_content($msg,$add_msg){
 
 
 //-----------------------TRANSFER------------------------
-function tranfer_get_balance($acc){
+function transfer_get_balance($acc){
   global $mysqli;
   $output="";
   $sql="select balance from account where account_number=$acc";
@@ -640,19 +662,99 @@ function do_transfer($amount1,$acc1){
 }
 function do_transfer_content($msg,$add_msg){
     ?>
-                            <section id="about" class="about temp1">
-                              <div class="container">
-                                <div class="row">
-                                  <div class="col-lg-12 text-center">
-                                    <h2><?php echo $msg; ?></h2>
-                                    <p class="lead">
-                                      <?php echo $add_msg; ?> <a style='text-decoration:none;' href="#">PIGGY BANK</a>.</p>
+                              <section id="about" class="about temp1">
+                                <div class="container">
+                                  <div class="row">
+                                    <div class="col-lg-12 text-center">
+                                      <h2><?php echo $msg; ?></h2>
+                                      <p class="lead">
+                                        <?php echo $add_msg; ?> <a style='text-decoration:none;' href="#">PIGGY BANK</a>.</p>
+                                    </div>
                                   </div>
+                                  <!-- /.row -->
                                 </div>
-                                <!-- /.row -->
-                              </div>
-                              <!-- /.container -->
-                            </section>
-                            <?php
+                                <!-- /.container -->
+                              </section>
+                              <?php
+}
+
+//---------------------------DEPENDENT----------------------
+
+function dep_get_cus_deposit($id){
+  global $mysqli;
+  $sql="select a.deposit_a,a.deposit_number,a.customer_id,a.amount,a.account_number,a.date from deposit as a,customer as b,employee as c where c.employee_id=$id and c.dependent_name=b.customer_name";
+  try{
+    if($result=$mysqli->query($sql)){
+    if($result->num_rows>0){
+      if($row=$result->fetch_array()){
+        return $row;
+      }
+    }
+  }
+  }catch(Exception $e){
+    do_exp_content($e->getMessage());
+  }
+}
+
+function dep_balance($id){
+  global $mysqli;
+  $sql="SELECT balance from account where account_number=$id";
+  if($result=$mysqli->query($sql)){
+    if($row=$result->fetch_array()){
+      return $row[0];
+    }
+  }
+}
+
+function dep_cus_check($row){
+  if($row[0]==1){
+    return true;
+  }else{
+    return false;
+  }
+  
+}
+
+function cust_dep($user){
+  global $mysqli;
+  $details=dep_get_cus_deposit($user);
+  if($details[0]==0){
+    return  true;
+  }else{
+    return false;
+    $sql="UPDATE account set balance=$amount where account_number=".$_SESSION['valid_user_id'];
+  }
+}
+
+function do_query($sql){
+  global $mysqli;
+  if($mysqli->query($sql)){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function dep_get_loan_details($id){
+  global $mysqli;
+  $sql="select a.loan_active,a.loan_number,a.account_number,a.amount,a.customer_id,a.loan_date from loan as a,customer as b,employee as c where c.employee_id=$id and c.dependent_name=b.customer_name and a.customer_id = b.customer_id and a.loan_active=1";
+  try{
+    if($result=$mysqli->query($sql)){
+    if($result->num_rows>0){
+      if($row=$result->fetch_array()){
+        return $row;
+      }
+    }
+  }
+  }catch(Exception $e){
+    do_exp_content($e->getMessage());
+  }
+}
+function dep_cus_loan_check($row){
+  if($row[0]==1){
+    return true;
+  }else{
+    return false;
+  }
 }
 ?>

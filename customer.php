@@ -76,13 +76,11 @@ if($task=='det'){
             if($row=$result->fetch_array()){
                 ?>
     <table class='table table-striped'>
-      <thead>
         <tr>
           <th colspan='2' class='table-inverse'>
             <center>Customer Details</center>
           </th>
         </tr>
-      </thead>
       <tr>
         <td>Customer Name: </td>
         <td>

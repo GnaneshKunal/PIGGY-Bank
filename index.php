@@ -44,15 +44,15 @@ do_index_menu();
                             throw new Exception("Please Enter the Form");
                         }
                         if($cus_emp=='customer'){
-                            $sql="select username,account_number from user_accounts where username='$username' and password='".sha1($password)."'";
+                            $sql="select username,account_number from user_customer where username='$username' and password='".sha1($password)."'";
                         }else{
-                            $sql="select employee_id,telephone_number from employee where employee_id=$username and telephone_number=$password";
+                            $sql="select username,employee_id from user_employee where username='$username' and password='".sha1($password)."'";
                         }
                         if($result=$mysqli->query($sql)){
                             if($result->num_rows >0){
                                if($row=$result->fetch_array()){
                                    $_SESSION['valid_user']=$row[0];
-                                   $_SESSION['valid_user_account_number']=$row[1];
+                                   @$_SESSION['valid_user_id']=$row[1];
                                    $_SESSION['logged_in']=1;
                                    $_SESSION['user_type']=$cus_emp;
                                   //main_customer.php = main.php
@@ -105,7 +105,7 @@ do_index_menu();
                     }
                 }
         }else{
-            header("Location: main.php");
+            header("Location:/main.php");
         }
 do_footer();
         ?>

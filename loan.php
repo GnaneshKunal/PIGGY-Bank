@@ -20,7 +20,8 @@ if($loan_task==''){
 }
 if($loan_task=='request'){
   if(loan_active_check()){
-    do_loan_content("YOU HAVE AN ACTIVE LOAN","Come Back Later");
+    $data=active_loan_amount($_SESSION['valid_user_id']);
+    do_loan_content("YOU HAVE AN ACTIVE LOAN OF $data","Come Back Later");
   }else{
     if(!isset($_POST['submit_loan'])){
     ?>
@@ -43,7 +44,7 @@ if($loan_task=='request'){
       try{
         $amount=(int)$_POST['amount'];
         $details=array();
-        $details=loan_details($_SESSION['valid_user_account_number']);
+        $details=loan_details($_SESSION['valid_user_id']);
         if(empty($details) || !is_array($details)){
           throw new Exception("Can't Fetch User Details");
         }
@@ -53,8 +54,12 @@ if($loan_task=='request'){
         if($amount<1000 || $amount >500000){
           throw new Exception("LIMIT EXCEEDED");
         }
-        $sql="INSERT INTO loan(customer_id,amount,account_number,loan_active) values($details[0],$amount,$details[1],1)";
-        if($result=$mysqli->query($sql)){
+        $balance=transfer_get_balance($_SESSION['valid_user_id']);
+        $new_amount=$amount+$balance;
+        $date=date("Y-m-d",time());
+        $sql="INSERT INTO loan(customer_id,amount,account_number,loan_active,loan_date) values($details[0],$amount,$details[1],1,'$date')";
+        $sql2="update account set balance=$new_amount where account_number=".$_SESSION['valid_user_id'];
+        if(do_query($sql)&&do_query($sql2)){
           do_loan_content("LOAN WAS SUCCESSFUL","CLICK <a href='loan.php?loan_task=check'>HERE</a> TO CHECK.      ");
         }else{
           throw new Exception("SOMETHING WENT WRONG");
@@ -65,14 +70,8 @@ if($loan_task=='request'){
     }
   }
 }
-
 if($loan_task=='prev'){
   loan_prev();
 }
-
-
-
-
-
 do_footer();
 ?>
