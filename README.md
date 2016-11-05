@@ -1,4 +1,8 @@
 # PIGGY-Bank
 PIGGY BANK Web Application.
 
-This is just a prototype. The final version of this application will be updated soon.
+customer:-
+        username:name, password:customer_id
+
+Bank:-
+      username:name,password:telephone_no
