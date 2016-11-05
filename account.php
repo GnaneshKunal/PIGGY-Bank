@@ -13,9 +13,9 @@ if(valid_user()){
         do_menu($user);
             try{
                 if($_SESSION['user_type']=='customer'){
-                    $sql="SELECT * from account where account_number=".$_SESSION['valid_user_account_number']."";
+                    $sql="SELECT * from account where account_number=".$_SESSION['valid_user_id']."";
                 }else{
-                    $sql="select * from employee where employee_id=".$_SESSION['valid_user'];
+                    $sql="select * from employee where employee_id=".$_SESSION['valid_user_id'];
                 }
             if($result=$mysqli->query($sql)){ 
                 if($result->num_rows >0){
@@ -50,7 +50,25 @@ if(valid_user()){
     <tr>
       <td>Balance: </td>
       <td>
+        <?php echo $row[3]; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Bank Branch: </td>
+      <td>
         <?php echo $row[2]; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Assests: </td>
+      <td>
+        <?php echo $row[4]; ?>
+      </td>
+    </tr>
+    <tr>
+      <td>Account Type: </td>
+      <td>
+        <?php echo $row[5]; ?>
       </td>
     </tr>
   </table>

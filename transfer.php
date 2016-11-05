@@ -3,7 +3,7 @@ session_start();
 require('config.php');
 require('usr_funcs.php');
 if(!valid_user_check()){
-  header("index.php");
+  header("Location: index.php");
 }
 do_header("Transfer");
 do_menu($_SESSION['valid_user']);
@@ -12,7 +12,7 @@ do_menu($_SESSION['valid_user']);
 if(!isset($_POST['submit_transfer'])){
   ?>
   <div class='container' style='margin-top:50px;'>
-    <h3><?php echo "Your Current Balance: ".tranfer_get_balance($_SESSION['valid_user_account_number']); ?></h3>
+    <h3><?php echo "Your Current Balance: ".transfer_get_balance($_SESSION['valid_user_id']); ?></h3>
           <form method='post'>
             <div class="form-group">
               <label for="formGroupExampleInput2">Account Number:</label>
@@ -43,7 +43,7 @@ if(!isset($_POST['submit_transfer'])){
     if($amount<1000){
       throw new Exception("Add Higher Amount");
     }
-    $balance_own=transfer_details($_SESSION['valid_user_account_number']);
+    $balance_own=transfer_details($_SESSION['valid_user_id']);
     if($amount>$balance_own){
       throw new Exception("You Don't Have enough amount to Transfer");
     }
@@ -53,7 +53,7 @@ if(!isset($_POST['submit_transfer'])){
     }
     $bal_own_new=$balance_own-$amount;
     $bal_other_new=$balance_other+$amount;
-    $det=array($bal_own_new,$_SESSION['valid_user_account_number'],$bal_other_new,$account_number);
+    $det=array($bal_own_new,$_SESSION['valid_user_id'],$bal_other_new,$account_number);
     if(do_transfer($det[0],$det[1]) && do_transfer($det[2],$det[3])){
       do_transfer_content("TRANSFER SUCCESSFUL","You can check your new balance now");
     }else{
