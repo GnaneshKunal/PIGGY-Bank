@@ -163,17 +163,19 @@ if($get_task=='deposit'){
           throw new Exception("LIMIT EXCEEDED");
         }
         $date=date('Y-m-d');
-        $depo="INSERT INTO DEPOSIT(customer_id,amount,account_number,date,deposit_a)  VALUES(".$details[0].",".$amount.",".$_SESSION['valid_user_id'].",'$date',1)";
-        if(!$mysqli->query($depo)){
+        $depo="INSERT INTO deposit(customer_id,amount,account_number,date,deposit_a)  VALUES(".$details[0].",".$amount.",".$_SESSION['valid_user_id'].",'$date',1)";
+        if($mysqli->query($depo)){
+          do_depo_content("DEPOSIT WAS SUCCESSFUL","We're processing.      ");
+        }else{
           throw new Exception("Something Went Wrong Please Try again Later");
         }
-        $amount+=$details[1];
-        $sql="UPDATE account set balance=$amount where account_number=".$_SESSION['valid_user_id'];
-        if($result=$mysqli->query($sql)){
+        //$amount+=$details[1];
+        //$sql="UPDATE account set balance=$amount where account_number=".$_SESSION['valid_user_id'];
+        /*if($result=$mysqli->query($sql)){
           do_depo_content("DEPOSIT WAS SUCCESSFUL","We're processing.      ");
         }else{
           throw new Exception("SOMETHING WENT WRONG");
-        }
+        } */
       }catch(Exception $e){
         do_exp_content($e->getMessage());
       }
