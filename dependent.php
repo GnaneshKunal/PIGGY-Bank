@@ -119,7 +119,7 @@ if($task=='deposit'){
   $sql="update deposit set deposit_a=0 where deposit_number=$dep_no and deposit_a=1";
   $sql2="update account set balance=$amount_new where account_number=".$details[4];
   if(do_query($sql)&&do_query($sql2)){
-    echo "DONE";
+    header('Location:dependent.php');
   }else{
     echo "SOMETHING WENT WRONG";
   }
@@ -142,7 +142,7 @@ if($task=='loan'){
   $sql="update loan set loan_active=0 where account_number=".$details[2]." and loan_active=1";
   $sql2="update account set balance=$amount_final where account_number=".$details[2];
   if(do_query($sql)&&do_query($sql2)){
-    echo "DONE";
+    header('Location:dependent.php');
   }else{
     echo "SOMETHING WENT WRONG";
   }

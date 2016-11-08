@@ -21,9 +21,7 @@ do_menu($_SESSION['valid_user']);
         <?php
         if(isset($_SESSION['logged_in'])){
             if($_SESSION['logged_in']==1){
-                ?>
-          <h1>Welcome to the Bank Page</h1>
-          <?php
+               
                 unset($_SESSION['logged_in']);
             }else{
                 unset($_SESSION['logged_in']);
